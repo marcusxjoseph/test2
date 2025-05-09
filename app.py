@@ -32,41 +32,12 @@ def upload_pdf():
     f = request.files['pdf']
     if not f or not f.filename.endswith('.pdf'):
         return "Ungültige Datei", 400
+
     unique_name = str(uuid.uuid4())
     pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{unique_name}.pdf")
     f.save(pdf_path)
 
-    # 📄 PDF analysieren & CSV ausfüllen
+    # PDF analysieren & Daten extrahieren
     extracted = extract_invoice_data(pdf_path)
-    csv_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{unique_name}.csv")
-    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['glaeubiger_name', 'glaeubiger_strasse', 'glaeubiger_hausnummer',
-                      'glaeubiger_plz', 'glaeubiger_ort', 'schuldner_name', 'schuldner_strasse',
-                      'schuldner_hausnummer', 'schuldner_plz', 'schuldner_ort',
-                      'hauptforderung', 'gegenstand', 'amtsgericht']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerow(extracted
-            'glaeubiger_name': 'Beispiel GmbH',
-            'glaeubiger_strasse': 'Musterweg',
-            'glaeubiger_hausnummer': '1',
-            'glaeubiger_plz': '12345',
-            'glaeubiger_ort': 'Musterstadt',
-            'schuldner_name': 'Max Mustermann',
-            'schuldner_strasse': 'Beispielstraße',
-            'schuldner_hausnummer': '2',
-            'schuldner_plz': '54321',
-            'schuldner_ort': 'Beispieldorf',
-            'hauptforderung': '1234.56',
-            'gegenstand': 'Lieferung laut Rechnung',
-            'amtsgericht': 'AG Musterstadt'
-        })
 
-    data = parse_input(csv_path)
-    tree = generate_eda_xml(data)
-    zip_path = create_eda_zip(tree, unique_name)
-    return send_file(zip_path, as_attachment=True)
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    # Temporäre CSV-Datei mit extrahiert
