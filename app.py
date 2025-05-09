@@ -40,4 +40,24 @@ def upload_pdf():
     # PDF analysieren & Daten extrahieren
     extracted = extract_invoice_data(pdf_path)
 
-    # Temporäre CSV-Datei mit extrahiert
+    # Temporäre CSV-Datei mit extrahierten Daten erstellen
+    csv_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{unique_name}.csv")
+    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['glaeubiger_name', 'glaeubiger_strasse', 'glaeubiger_hausnummer',
+                      'glaeubiger_plz', 'glaeubiger_ort', 'schuldner_name', 'schuldner_strasse',
+                      'schuldner_hausnummer', 'schuldner_plz', 'schuldner_ort',
+                      'hauptforderung', 'gegenstand', 'amtsgericht']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow(extracted)
+
+    data = parse_input(csv_path)
+    tree = generate_eda_xml(data)
+    zip_path = create_eda_zip(tree, unique_name)
+    return send_file(zip_path, as_attachment=True)
+
+# ✅ Port-Bindung für Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
