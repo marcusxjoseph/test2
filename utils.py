@@ -1,3 +1,4 @@
+# utils.py
 import pdfplumber
 
 def extract_invoice_data(pdf_path):
@@ -6,15 +7,15 @@ def extract_invoice_data(pdf_path):
         for page in pdf.pages:
             text += page.extract_text() + "\n"
 
-    # Einfache heuristische Extraktion (kann angepasst werden)
+    # Beispielhafte Extraktion: Du kannst RegEx oder NLP verwenden
     data = {
         'glaeubiger_name': 'Beispiel GmbH',
-        'glaeubiger_strasse': 'Musterweg',
+        'glaeubiger_strasse': 'Musterstraße',
         'glaeubiger_hausnummer': '1',
         'glaeubiger_plz': '12345',
         'glaeubiger_ort': 'Musterstadt',
         'schuldner_name': 'Max Mustermann',
-        'schuldner_strasse': 'Beispielstraße',
+        'schuldner_strasse': 'Beispielweg',
         'schuldner_hausnummer': '2',
         'schuldner_plz': '54321',
         'schuldner_ort': 'Beispieldorf',
@@ -23,16 +24,5 @@ def extract_invoice_data(pdf_path):
         'amtsgericht': 'AG Musterstadt'
     }
 
-    # Beispielsuche (je nach Layout anpassen)
-    lines = text.splitlines()
-    for line in lines:
-        if 'Rechnungsbetrag' in line or 'Gesamtbetrag' in line:
-            try:
-                betrag = ''.join(filter(str.isdigit, line.replace(",", ".")))
-                data['hauptforderung'] = str(float(betrag) / 100)
-            except:
-                pass
-        if 'Herr' in line or 'Frau' in line:
-            data['schuldner_name'] = line.strip()
-
+    # Du kannst hier echte Parsing-Logik basierend auf dem Text einbauen
     return data
