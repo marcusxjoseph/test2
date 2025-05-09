@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Mahnantrags-Generator</title>
+</head>
+<body>
+    <h2>📁 Mahnantrag hochladen</h2>
+
+    <h3>Option 1: CSV oder JSON-Datei</h3>
+    <form method="post" action="/" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv,.json" required>
+        <button type="submit">Verarbeiten & ZIP herunterladen</button>
+    </form>
+
+    <hr>
+
+    <h3>Option 2: PDF-Rechnung (automatische Umwandlung)</h3>
+    <form method="post" action="/upload-pdf" enctype="multipart/form-data">
+        <input type="file" name="pdf" accept=".pdf" required>
+        <button type="submit">PDF analysieren & ZIP herunterladen</button>
+    </form>
+</body>
+</html>
