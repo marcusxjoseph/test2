@@ -8,17 +8,17 @@
     <h2>📁 Mahnantrag hochladen</h2>
 
     <h3>Option 1: CSV oder JSON-Datei</h3>
-    <form method="post" action="/" enctype="multipart/form-data">
+    <form method="POST" action="/" enctype="multipart/form-data">
         <input type="file" name="file" accept=".csv,.json" required>
-        <button type="submit">Verarbeiten & ZIP herunterladen</button>
+        <button type="submit">CSV/JSON hochladen</button>
     </form>
 
     <hr>
 
     <h3>Option 2: PDF-Rechnung (automatische Umwandlung)</h3>
-    <form method="post" action="/upload-pdf" enctype="multipart/form-data">
+    <form method="POST" action="/upload-pdf" enctype="multipart/form-data">
         <input type="file" name="pdf" accept=".pdf" required>
-        <button type="submit">PDF analysieren & ZIP herunterladen</button>
+        <button type="submit">PDF hochladen</button>
     </form>
 </body>
 </html>
